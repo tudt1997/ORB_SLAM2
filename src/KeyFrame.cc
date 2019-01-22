@@ -674,9 +674,11 @@ KeyFrame::KeyFrame():
     mnMinX(0), mnMinY(0), mnMaxX(0),
     mnMaxY(0)
 {}
+int KeyFrame::saved_kfs = 0;
 template<class Archive>
 void KeyFrame::serialize(Archive &ar, const unsigned int version)
 {
+    saved_kfs++;
     // no mutex needed vars
     ar & nNextId;
     ar & mnId;

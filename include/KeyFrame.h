@@ -121,6 +121,7 @@ public:
     // for serialization
     KeyFrame(); // Default constructor for serialization, need to deal with const member
     void SetORBvocabulary(ORBVocabulary *porbv) {mpORBvocabulary=porbv;}
+    static int saved_kfs;
 private:
     // serialize is recommended to be private
     friend class boost::serialization::access;

@@ -422,10 +422,11 @@ MapPoint::MapPoint():
     mnCorrectedReference(0), mnBAGlobalForKF(0),mnVisible(1), mnFound(1), mbBad(false),
     mpReplaced(static_cast<MapPoint*>(NULL)), mfMinDistance(0), mfMaxDistance(0)
 {}
+int MapPoint::saved_mps = 0;
 template<class Archive>
 void MapPoint::serialize(Archive &ar, const unsigned int version)
 {
-    unique_lock<mutex> lock_Global(mGlobalMutex);
+    saved_mps++;
     unique_lock<mutex> lock_Pos(mMutexPos);
     unique_lock<mutex> lock_Features(mMutexFeatures);
     ar & mnId & nNextId & mnFirstKFid & mnFirstFrame & nObs;

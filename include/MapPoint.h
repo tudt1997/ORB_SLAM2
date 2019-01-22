@@ -85,6 +85,7 @@ public:
 public:
     // for serialization
     MapPoint();
+    static int saved_mps;
 private:
     // serialize is recommended to be private
     friend class boost::serialization::access;
