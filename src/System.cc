@@ -215,7 +215,7 @@ cv::Mat System::TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const doub
         }
         if(mbDeactivateLocalizationMode)
         {
-            mpTracker->InformOnlyTracking(falLAe);
+            mpTracker->InformOnlyTracking(false);
             mpLocalMapper->Release();
             mbDeactivateLocalizationMode = false;
         }
