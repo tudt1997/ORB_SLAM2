@@ -110,7 +110,7 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
 
     cv::Mat pose = mpSLAM->TrackRGBD(cv_ptrRGB->image,cv_ptrD->image,cv_ptrRGB->header.stamp.toSec());
 
-    if (pose.empty())
+    if (pose.empty() || mpSLAM->GetTrackingState() == 3) // LOST = 3
         return;
 
     /* global left handed coordinate system */
@@ -143,8 +143,10 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
     static tf::TransformBroadcaster br;
 
     tf::Matrix3x3 globalRotation_rh = cameraRotation_rh * rotation270degXZ;
+    tf::Quaternion q;
+    globalRotation_rh.getRotation(q);
     tf::Vector3 globalTranslation_rh = cameraTranslation_rh * rotation270degXZ;
-    tf::Transform transform = tf::Transform(globalRotation_rh, globalTranslation_rh);
+    tf::Transform transform = tf::Transform(q, globalTranslation_rh);
     br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "camera_link", "camera_pose"));
 }
 
