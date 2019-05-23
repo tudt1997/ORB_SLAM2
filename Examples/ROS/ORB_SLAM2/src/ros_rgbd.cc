@@ -24,6 +24,7 @@
 #include <fstream>
 #include <chrono>
 #include <ros/ros.h>
+#include <ros/package.h>
 #include <cv_bridge/cv_bridge.h>
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
@@ -48,8 +49,9 @@ public:
     tf::TransformBroadcaster broadcaster;
 
     const cv::Mat rotation270degXZ = (cv::Mat_<double>(3,3) << 0, 1, 0, 
-                                                            0, 0, 1,
-                                                            1, 0, 0);
+                                                               0, 0, 1,
+                                                               1, 0, 0);
+
 };
 
 int main(int argc, char **argv)
@@ -57,15 +59,19 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "RGBD");
     ros::start();
 
-    if(argc != 3)
+    if(argc != 1)
     {
-        cerr << endl << "Usage: rosrun ORB_SLAM2 RGBD path_to_vocabulary path_to_settings" << endl;        
+        cerr << endl << "Usage: rosrun ORB_SLAM2 RGBD" << endl;        
         ros::shutdown();
         return 1;
     }    
 
+    string path = ros::package::getPath("ORB_SLAM2") + "/../../";
+    string vocabulary = "../Vocabulary/ORBvoc.bin";
+    string config = "RGB-D/TUM2.yaml";
+    
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::RGBD,true);
+    ORB_SLAM2::System SLAM(path + vocabulary, path + config, ORB_SLAM2::System::RGBD, true);
 
     ImageGrabber igb(&SLAM);
 
